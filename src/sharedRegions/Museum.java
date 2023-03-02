@@ -6,12 +6,9 @@ import genclass.*;
 import main.SimulConsts;
 
 public class Museum {
-    
-
-
 
     /**
-     *   Reference to the general repository.
+     * Reference to the general repository.
      */
     private final GeneralRepos repos;
 
@@ -20,13 +17,13 @@ public class Museum {
      *
      * @param repos reference to the general repository
      */
-    public Museum(GeneralRepos repos){
-        
+    public Museum(GeneralRepos repos) {
+
         this.repos = repos;
     }
 
-    public synchronized void rollACanvas(){
-        
+    public synchronized void rollACanvas() {
+
     }
 
 }

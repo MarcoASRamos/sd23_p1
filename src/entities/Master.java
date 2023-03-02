@@ -2,10 +2,10 @@ package entities;
 
 import sharedRegions.*;
 
-public class Master extends Thread{
+public class Master extends Thread {
 
     /**
-     *  Master Name
+     * Master Name
      */
     private String name;
 
@@ -39,7 +39,6 @@ public class Master extends Thread{
      */
     private final ControlCollectionSite ccs;
 
-
     /**
      * Reference to the general repository
      */
@@ -47,16 +46,18 @@ public class Master extends Thread{
 
     /**
      * Instantiation of a master thread.
-     * @param name  master Name
+     * 
+     * @param name        master Name
      * @param masterId    master Id
      * @param masterState master state
-     * @param ap0 Reference to AssaultParty0
-     * @param ap1 Reference to AssaultParty1
-     * @param cs Reference to ConcentrationSite
-     * @param ccs Reference to ControlCollectionSite
-     * @param repos Reference to GeneralRepos
+     * @param ap0         Reference to AssaultParty0
+     * @param ap1         Reference to AssaultParty1
+     * @param cs          Reference to ConcentrationSite
+     * @param ccs         Reference to ControlCollectionSite
+     * @param repos       Reference to GeneralRepos
      */
-    public Master(String name, int masterId, int masterState, AssaultParty0 ap0, AssaultParty1 ap1, ConcentrationSite cs, ControlCollectionSite ccs, GeneralRepos repos) {
+    public Master(String name, int masterId, int masterState, AssaultParty0 ap0, AssaultParty1 ap1,
+            ConcentrationSite cs, ControlCollectionSite ccs, GeneralRepos repos) {
         this.name = name;
         this.masterState = masterState;
         this.masterId = masterId;
@@ -69,6 +70,7 @@ public class Master extends Thread{
 
     /**
      * Get master name
+     * 
      * @return master name
      */
     public String getMasterName() {
@@ -77,6 +79,7 @@ public class Master extends Thread{
 
     /**
      * Set master name
+     * 
      * @param name master name
      */
     public void setMasterName(String name) {
@@ -85,6 +88,7 @@ public class Master extends Thread{
 
     /**
      * Get master Id
+     * 
      * @return master Id
      */
     public int getMasterId() {
@@ -93,6 +97,7 @@ public class Master extends Thread{
 
     /**
      * Set master Id
+     * 
      * @param masterId master Id
      */
     public void setMasterId(int masterId) {
@@ -101,6 +106,7 @@ public class Master extends Thread{
 
     /**
      * Get master State
+     * 
      * @return master state
      */
     public int getMasterState() {
@@ -109,6 +115,7 @@ public class Master extends Thread{
 
     /**
      * Set master State
+     * 
      * @param masterState master state
      */
     public void setMasterState(int masterState) {
@@ -130,18 +137,20 @@ public class Master extends Thread{
         startOperation();
 
         boolean assault = true;
-        while(assault){
-            switch(cs.appraiseSit()){
+        while (assault) {
+            switch (cs.appraiseSit()) {
                 case 'a':
-                    cs.prepareAssaultParty();
-                    sendAssaultParty();
+                    int ap = cs.prepareAssaultParty();
+                    if (ap)
+                        ap0.sendAssaultParty();
+                    else
+                        ap1.sendAssaultParty();
                     break;
-                
+
                 case 'r':
                     ccs.takeARest();
                     ccs.collectACanvas();
                     break;
-
 
                 case 's':
                     cs.sumUpResults();
@@ -150,8 +159,6 @@ public class Master extends Thread{
             }
         }
 
-
     }
 
-    
 }
