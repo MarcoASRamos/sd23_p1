@@ -56,7 +56,7 @@ public class Ordinary extends Thread{
      * @param ordinaryState ordinary state
      * @param repos Reference to GeneralRepos
      */
-    public Ordinary(String name, int ordinaryId, int ordinaryState, AssaultParty0 ap0, AssaultParty1 ap1, Museum museum, ConcentrationSite cs, ControlCollectionSite ccs, GeneralRepos repos) {
+    public Ordinary(String name, int ordinaryId, int ordinaryState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty0 ap0, AssaultParty1 ap1, Museum museum) {
         this.name = name;
         this.ordinaryState = ordinaryState;
         this.ordinaryId = ordinaryId;
@@ -128,19 +128,28 @@ public class Ordinary extends Thread{
      */
     @Override
     public void run() {
+        int ap = ;
         while(cs.amINeeded()){
-            int ap = cs.prepareExcursion();
-            if (ap==0) ap0.crawlIn();
-            else ap1.crawlIn();
+            int member = cs.prepareExcursion();
+            
 
+            boolean room = false;
+            while (!room)
+                room = ap==0? ap0.crawlIn(member): ap1.crawlIn(member);
+            
             museum.rollACanvas();
-            if (ap==0){
-                ap0.reverseDirection();
-                ap0.crawlOut();
-            }else{
-                ap1.reverseDirection();
-                ap1.crawlOut();
+
+            boolean site = false;
+            while(!site){
+                if (ap==0){
+                    ap0.reverseDirection(member);
+                    site = ap0.crawlOut(member);
+                }else{
+                    ap1.reverseDirection();
+                    site = ap1.crawlOut(member);
+                }
             }
+            
             ccs.handACanvas();
         }
 

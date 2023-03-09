@@ -15,9 +15,10 @@ public class MuseumSimulation{
      *    @param args runtime arguments
      */
     public static void main(String[] args) {
-
-        Master master;										    //Reference to the Master thief Thread
-        Ordinary[] ordinaries = new Ordinary[SimulConsts.O];    //array of references to the Ordinary thief Threads
+        System.out.println("museum");
+        
+        Master master;				 //Reference to the Master thief Thread
+        Ordinary[] ordinaries = new Ordinary[SimulConsts.M-1];    //References to the Ordinary thief Threads
 
         Museum museum;							    //Reference to the Museum
         AssaultParty0 ap0;					        //Reference to the Assault Party #0
@@ -27,32 +28,32 @@ public class MuseumSimulation{
         GeneralRepos repos;                         //Reference to the General Repository
 
         System.out.println("The Restaurant Simulation");
-        /* problem initialization */
+        // problem initialization
         repos = new GeneralRepos("logger");
         ap0 = new AssaultParty0(repos);
         ap1 = new AssaultParty1(repos);
         cs = new ConcentrationSite(repos);
         ccs = new ControlCollectionSite(repos);
+        museum = new Museum(repos);
 
-        master = new Master("Master", 0, MasterStates.PLANNING_THE_HEIST, repos);
+        master = new Master("Master", 0, MasterStates.PLANNING_THE_HEIST, repos, cs, ccs, ap0, ap1);
         for (int i = 0; i < SimulConsts.M-1; i++)
-            ordinaries[i] = new Ordinary("Ordinary_"+(i+1), i, OrdinaryStates.CONCENTRATION_SITE, repos);
+            ordinaries[i] = new Ordinary("Ordinary_"+(i+1), i, OrdinaryStates.CONCENTRATION_SITE, repos, cs, ccs, ap0, ap1, museum);
     
-        /* start of the simulation */
+        // start of the simulation
         master.start();
         System.out.println("Master start");
         for (int i = 0; i < SimulConsts.M-1; i++) {
             ordinaries[i].start();
             System.out.println("Ordinary "+ i +" start");
         }
-        /* waiting for the end of the simulation */
-        for (int i = 0; i < SimulConsts.M-1; i++)
-        { try
-        {
-            ordinaries[i].join ();
-            System.out.println("Ordinary "+ i +" join");
-        }
-        catch (InterruptedException e) {}
+
+        // waiting for the end of the simulation
+        for (int i = 0; i < SimulConsts.M-1; i++){ 
+            try{
+                ordinaries[i].join ();
+                System.out.println("Ordinary "+ i +" join");
+            } catch (InterruptedException e) {}
             System.out.println("The Ordinary "+(i+1)+" just terminated");
         }
 
@@ -60,8 +61,8 @@ public class MuseumSimulation{
             master.join();
             System.out.println("Master join");
         } catch (InterruptedException e) {}
-        System.out.println("The Master has terminated");
 
+        System.out.println("The Master has terminated");
         System.out.println("End of the Simulation");
     }
 }

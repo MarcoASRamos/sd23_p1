@@ -7,6 +7,15 @@ import main.SimulConsts;
 
 public class ControlCollectionSite {
 
+    /**
+     * Indicate ordinary thieve handed a canvas
+     */
+    private boolean handed;
+
+    /**
+     * Indicate master thieve as collected the canvas
+     */
+    private boolean collected;
 
 
 
@@ -25,13 +34,22 @@ public class ControlCollectionSite {
         this.repos = repos;
     }
 
-    public synchronized void takeARest(){
+    
+
+
+
+    public synchronized void startOperation(){
+        //Update Master state
+		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
+		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
+    }
+
+
+    public synchronized int takeARest(){
 
         while(!handed){
-			try {
-				wait();
+			try { wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -40,18 +58,16 @@ public class ControlCollectionSite {
 		((Master) Thread.currentThread()).setMasterState(MasterStates.WAITING_FOR_GROUP_ARRIVAL);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
 
+        return 0;
     }
 
     public synchronized void handACanvas(){
-
         notifyAll();
         handed = true;
 
         while(!collected){
-			try {
-				wait();
+			try { wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

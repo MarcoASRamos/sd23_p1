@@ -4,10 +4,40 @@ import commInfra.*;
 import entities.*;
 import genclass.*;
 import main.SimulConsts;
+import java.util.Random;
 
 public class AssaultParty1 {
 
+    /**
+     * Sended assault party
+     */
+    private boolean sended;
 
+    /**
+     * Crawl In initialization
+     */
+    private boolean crawlin;
+
+    /**
+     * Crawl In initialization
+     */
+    private boolean crawlout;
+
+    /**
+     * Distance form each member to room 
+     */
+    private int[] distRoom;
+
+    /**
+     * Distance form each member to site 
+     */ 
+    private int[] distSite;
+
+    /**
+     * Reverse signal
+     */
+    
+     private boolean reversed;
 
 
     /**
@@ -23,17 +53,32 @@ public class AssaultParty1 {
     public AssaultParty1(GeneralRepos repos){
         
         this.repos = repos;
+        this.reversed = false;
+        this.sended = false;
+        this.crawlin = false;
+        this.crawlout = false;
+        this.distRoom = new int[SimulConsts.E];
+        this.distSite = new int[SimulConsts.E];
     }
     
 
-    public synchronized void ReverseDirection(){
+    public synchronized void reverseDirection(){
+        crawlout = false;
+        reversed = true;
+        notifyAll();
+
         //Update Ordinary state
+        int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
 		((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CRAWLING_OUTWARDS);
-		repos.setOrdinaryState(((Ordinary) Thread.currentThread()).getOrdinaryState());
+		repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
 
     }
 
     public synchronized int sendAssaultParty(){
+        crawlin = false;
+        sended = true;
+        notifyAll();
+
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
@@ -44,42 +89,67 @@ public class AssaultParty1 {
 
     public synchronized boolean crawlIn(int member){
 
-		while(false){
-			try {
-				wait();
+		while(!(crawlin && valid()) || !(member==0 && sended)){
+			try { wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-        if(){
-            //Update Ordinary state
-            ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.AT_A_ROOM);
-            repos.setOrdinaryState(((Ordinary) Thread.currentThread()).getOrdinaryState());
+        if(member==0 && sended){
+            crawlin = true;
+            sended = false;
         }
 
-        return true;
+        do{
+            move = 2 + (int)(Math.random() * (MD - 2)+1);
+        }while(!valid());
+
+        distRoom[member]-=move;
+        notifyAll();
+
+        if(distSite[member]<=0){
+            //Update Ordinary state
+            int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+            ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.AT_A_ROOM);
+            repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
+        }
+
+        return distRoom[member]<=0;
     }
+
+
+
 
     public synchronized boolean crawlOut(int member){
 
-        while(false){
-			try {
-				wait();
+        while(!(crawlout && valid()) || !(member==2 && reversed)){
+			try { wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-        if(){
-            //Update Ordinary state
-		    ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.COLLECTION_SITE);
-		    repos.setOrdinaryState(((Ordinary) Thread.currentThread()).getOrdinaryState());
+        if(member==0 && reversed){
+            crawlout = true;
+            reversed = false;
         }
 
-        return true;
+        do{
+            move = 2 + (int)(Math.random() * (MD - 2)+1);
+        }while(!valid());
+
+        distRoom[member]-=move;
+        notifyAll();
+
+        if(distSite[member]<=0){
+            //Update Ordinary state
+		    int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+		    ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.COLLECTION_SITE);
+		    repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
+        }
+
+        return distSite[member]<=0;
     }
     
 }

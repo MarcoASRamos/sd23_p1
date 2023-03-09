@@ -1,5 +1,6 @@
 package entities;
 
+import main.SimulConsts;
 import sharedRegions.*;
 
 public class Master extends Thread {
@@ -56,8 +57,7 @@ public class Master extends Thread {
      * @param ccs         Reference to ControlCollectionSite
      * @param repos       Reference to GeneralRepos
      */
-    public Master(String name, int masterId, int masterState, AssaultParty0 ap0, AssaultParty1 ap1,
-            ConcentrationSite cs, ControlCollectionSite ccs, GeneralRepos repos) {
+    public Master(String name, int masterId, int masterState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty0 ap0, AssaultParty1 ap1) {
         this.name = name;
         this.masterState = masterState;
         this.masterId = masterId;
@@ -134,25 +134,43 @@ public class Master extends Thread {
      */
     @Override
     public void run() {
-        startOperation();
+        ccs.startOperation();
 
+        boolean avb_ap0=true, avb_ap1=true;
+        int members_ap0=0, members_ap1=0;
         boolean assault = true;
         while (assault) {
             switch (cs.appraiseSit()) {
-                case 'a':
-                    int ap = cs.prepareAssaultParty();
-                    if (ap)
+                case 1:
+                    if(avb_ap0){
+                        cs.prepareAssaultParty(0);
                         ap0.sendAssaultParty();
-                    else
+                        members_ap0++;
+                        if(members_ap0==SimulConsts.E) avb_ap0 = false;
+                    } else if(avb_ap1){
+                        cs.prepareAssaultParty(1);
                         ap1.sendAssaultParty();
+                        members_ap1++;
+                        if(members_ap1==SimulConsts.E) avb_ap1 = false;
+                    }
                     break;
 
-                case 'r':
-                    ccs.takeARest();
+
+
+                case 2:
+                    if(ccs.takeARest()==0){
+                        members_ap0--;
+                        if(members_ap0==0) avb_ap0 = true;
+                    } else{ 
+                        members_ap1--;
+                        if(members_ap1==0) avb_ap1 = true;
+                    }
                     ccs.collectACanvas();
                     break;
 
-                case 's':
+
+
+                case 3:
                     cs.sumUpResults();
                     assault = false;
                     break;
