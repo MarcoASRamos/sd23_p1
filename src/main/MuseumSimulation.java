@@ -21,8 +21,7 @@ public class MuseumSimulation{
         Ordinary[] ordinaries = new Ordinary[SimulConsts.M-1];    //References to the Ordinary thief Threads
 
         Museum museum;							    //Reference to the Museum
-        AssaultParty0 ap0;					        //Reference to the Assault Party #0
-        AssaultParty1 ap1;						    //Reference to the Assault Party #1
+        AssaultParty[] party;					    //Reference to the Assault Parties
         ConcentrationSite cs;					    //Reference to the Concentration Site
         ControlCollectionSite ccs;					//Reference to the Control Collection Site
         GeneralRepos repos;                         //Reference to the General Repository
@@ -30,15 +29,16 @@ public class MuseumSimulation{
         System.out.println("The Restaurant Simulation");
         // problem initialization
         repos = new GeneralRepos("logger");
-        ap0 = new AssaultParty0(repos);
-        ap1 = new AssaultParty1(repos);
+        party = new AssaultParty[2];
+        for(int i=0; i<2; i++)
+            party[i] = new AssaultParty(repos);
         cs = new ConcentrationSite(repos);
         ccs = new ControlCollectionSite(repos);
         museum = new Museum(repos);
 
-        master = new Master("Master", 0, MasterStates.PLANNING_THE_HEIST, repos, cs, ccs, ap0, ap1);
+        master = new Master("Master", 0, MasterStates.PLANNING_THE_HEIST, repos, cs, ccs, party);
         for (int i = 0; i < SimulConsts.M-1; i++)
-            ordinaries[i] = new Ordinary("Ordinary_"+(i+1), i, OrdinaryStates.CONCENTRATION_SITE, repos, cs, ccs, ap0, ap1, museum);
+            ordinaries[i] = new Ordinary("Ordinary_"+(i+1), i, OrdinaryStates.CONCENTRATION_SITE, repos, cs, ccs, party, museum);
     
         // start of the simulation
         master.start();
@@ -62,6 +62,7 @@ public class MuseumSimulation{
             System.out.println("Master join");
         } catch (InterruptedException e) {}
 
+        repos.reportFinalStatus();  //mudar localizaçao???
         System.out.println("The Master has terminated");
         System.out.println("End of the Simulation");
     }

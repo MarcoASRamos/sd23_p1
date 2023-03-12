@@ -21,14 +21,9 @@ public class Master extends Thread {
     private int masterState;
 
     /**
-     * Reference to the Assault Party 0
+     * Reference to the Assault Party 
      */
-    private final AssaultParty0 ap0;
-
-    /**
-     * Reference to the Assault Party 1
-     */
-    private final AssaultParty1 ap1;
+    private final AssaultParty[] party;
 
     /**
      * Reference to the Concentration Site
@@ -51,18 +46,16 @@ public class Master extends Thread {
      * @param name        master Name
      * @param masterId    master Id
      * @param masterState master state
-     * @param ap0         Reference to AssaultParty0
-     * @param ap1         Reference to AssaultParty1
+     * @param party       Reference to AssaultParty
      * @param cs          Reference to ConcentrationSite
      * @param ccs         Reference to ControlCollectionSite
      * @param repos       Reference to GeneralRepos
      */
-    public Master(String name, int masterId, int masterState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty0 ap0, AssaultParty1 ap1) {
+    public Master(String name, int masterId, int masterState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty[] party) {
         this.name = name;
         this.masterState = masterState;
         this.masterId = masterId;
-        this.ap0 = ap0;
-        this.ap1 = ap1;
+        this.party = party;
         this.cs = cs;
         this.ccs = ccs;
         this.repos = repos;
@@ -134,37 +127,26 @@ public class Master extends Thread {
      */
     @Override
     public void run() {
-        ccs.startOperation();
+        int r=0;
+        boolean[] rooms = new boolean[SimulConsts.N];
+        for(int i=0; i<SimulConsts.N; i++)
+            rooms[i] = false;
 
-        boolean avb_ap0=true, avb_ap1=true;
-        int members_ap0=0, members_ap1=0;
+        ccs.startOperation();
+        
         boolean assault = true;
         while (assault) {
-            switch (cs.appraiseSit()) {
+            switch (cs.appraiseSit(r>=SimulConsts.N)) {
                 case 1:
-                    if(avb_ap0){
-                        cs.prepareAssaultParty(0);
-                        ap0.sendAssaultParty();
-                        members_ap0++;
-                        if(members_ap0==SimulConsts.E) avb_ap0 = false;
-                    } else if(avb_ap1){
-                        cs.prepareAssaultParty(1);
-                        ap1.sendAssaultParty();
-                        members_ap1++;
-                        if(members_ap1==SimulConsts.E) avb_ap1 = false;
-                    }
+                    int ap = cs.getAssautlParty();
+                    cs.prepareAssaultParty(ap, r);
+                    //party[ap].sendAssaultParty(cs.getRoom());
                     break;
 
 
 
                 case 2:
-                    if(ccs.takeARest()==0){
-                        members_ap0--;
-                        if(members_ap0==0) avb_ap0 = true;
-                    } else{ 
-                        members_ap1--;
-                        if(members_ap1==0) avb_ap1 = true;
-                    }
+                    ccs.takeARest();
                     ccs.collectACanvas();
                     break;
 

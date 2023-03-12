@@ -23,7 +23,10 @@ public class Museum {
     }
 
     public synchronized void rollACanvas() {
-
+        //Update Ordinary state
+        int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+        ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.AT_A_ROOM);
+        repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
     }
 
 }

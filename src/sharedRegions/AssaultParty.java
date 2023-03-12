@@ -4,9 +4,14 @@ import commInfra.*;
 import entities.*;
 import genclass.*;
 import main.SimulConsts;
-import java.util.Random;
 
-public class AssaultParty1 {
+public class AssaultParty {
+
+
+
+    private int member;
+
+
 
     /**
      * Sended assault party
@@ -50,7 +55,8 @@ public class AssaultParty1 {
      *
      * @param repos reference to the general repository
      */
-    public AssaultParty1(GeneralRepos repos){
+
+     public AssaultParty (GeneralRepos repos){
         
         this.repos = repos;
         this.reversed = false;
@@ -62,10 +68,10 @@ public class AssaultParty1 {
     }
     
 
-    public synchronized void reverseDirection(){
+    public synchronized void reverseDirection(int member){
         crawlout = false;
         reversed = true;
-        notifyAll();
+        if(member == 2 ) notifyAll();
 
         //Update Ordinary state
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
@@ -87,7 +93,8 @@ public class AssaultParty1 {
     }
 
 
-    public synchronized boolean crawlIn(int member){
+    public synchronized boolean crawlIn(int member, int md){
+        int move; 
 
 		while(!(crawlin && valid()) || !(member==0 && sended)){
 			try { wait();
@@ -102,18 +109,11 @@ public class AssaultParty1 {
         }
 
         do{
-            move = 2 + (int)(Math.random() * (MD - 2)+1);
+            move = 2 + (int)(Math.random() * (md - 2)+1);
         }while(!valid());
 
         distRoom[member]-=move;
         notifyAll();
-
-        if(distSite[member]<=0){
-            //Update Ordinary state
-            int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
-            ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.AT_A_ROOM);
-            repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
-        }
 
         return distRoom[member]<=0;
     }
@@ -121,8 +121,9 @@ public class AssaultParty1 {
 
 
 
-    public synchronized boolean crawlOut(int member){
-
+    public synchronized boolean crawlOut(int md){
+        int move; 
+        
         while(!(crawlout && valid()) || !(member==2 && reversed)){
 			try { wait();
 			} catch (InterruptedException e) {
@@ -136,7 +137,7 @@ public class AssaultParty1 {
         }
 
         do{
-            move = 2 + (int)(Math.random() * (MD - 2)+1);
+            move = 2 + (int)(Math.random() * (md - 2)+1);
         }while(!valid());
 
         distRoom[member]-=move;
@@ -150,6 +151,12 @@ public class AssaultParty1 {
         }
 
         return distSite[member]<=0;
+    }
+
+
+    
+    private boolean valid(){
+        return true;
     }
     
 }

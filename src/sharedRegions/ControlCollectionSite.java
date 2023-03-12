@@ -17,7 +17,21 @@ public class ControlCollectionSite {
      */
     private boolean collected;
 
+    /**
+     * State of each room, if is empty or not
+     */
+    private boolean[] rooms;
 
+    /**
+     * Getter room state list
+     * 
+     * @return room state list
+     */
+    public synchronized boolean getRoomsState(){
+        for(int i=0; i<SimulConsts.N; i++)
+            if(rooms[i]) return false;
+        return true;
+    }
 
     /**
      *   Reference to the general repository.
@@ -32,6 +46,10 @@ public class ControlCollectionSite {
     public ControlCollectionSite(GeneralRepos repos){
         
         this.repos = repos;
+        this.rooms = new boolean[SimulConsts.N];
+        for(int i=0; i<SimulConsts.N; i++)
+            rooms[i]=true;
+        
     }
 
     
@@ -43,6 +61,7 @@ public class ControlCollectionSite {
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
     }
+
 
 
     public synchronized int takeARest(){
@@ -61,6 +80,9 @@ public class ControlCollectionSite {
         return 0;
     }
 
+
+
+
     public synchronized void handACanvas(){
         notifyAll();
         handed = true;
@@ -73,9 +95,11 @@ public class ControlCollectionSite {
 		}
 
         collected = false;
-
-
     }
+
+
+
+
 
     public synchronized void collectACanvas(){
         notifyAll();
@@ -84,7 +108,6 @@ public class ControlCollectionSite {
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
-
     }
     
 }

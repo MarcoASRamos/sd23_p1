@@ -1,5 +1,6 @@
 package entities;
 
+import main.SimulConsts;
 import sharedRegions.*;
 
 public class Ordinary extends Thread{
@@ -20,14 +21,9 @@ public class Ordinary extends Thread{
     private int ordinaryState;
 
     /**
-     * Reference to the Assault Party 0
+     * Reference to the Assault Party
      */
-    private final AssaultParty0 ap0;
-
-    /**
-     * Reference to the Assault Party 1
-     */
-    private final AssaultParty1 ap1;
+    private final AssaultParty[] party;
 
     /**
      * Reference to the Concentration Site
@@ -56,12 +52,11 @@ public class Ordinary extends Thread{
      * @param ordinaryState ordinary state
      * @param repos Reference to GeneralRepos
      */
-    public Ordinary(String name, int ordinaryId, int ordinaryState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty0 ap0, AssaultParty1 ap1, Museum museum) {
+    public Ordinary(String name, int ordinaryId, int ordinaryState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty[] party, Museum museum) {
         this.name = name;
         this.ordinaryState = ordinaryState;
         this.ordinaryId = ordinaryId;
-        this.ap0 = ap0;
-        this.ap1 = ap1;
+        this.party = party;
         this.cs = cs;
         this.ccs = ccs;
         this.museum = museum;
@@ -128,29 +123,14 @@ public class Ordinary extends Thread{
      */
     @Override
     public void run() {
-        int ap = ;
-        while(cs.amINeeded()){
-            int member = cs.prepareExcursion();
-            
+        int ap=-1, md = 2 + (int)(Math.random() * (SimulConsts.MD-2)+1);
 
-            boolean room = false;
-            while (!room)
-                room = ap==0? ap0.crawlIn(member): ap1.crawlIn(member);
-            
+        while(cs.amINeeded(ap)){
+            ap = cs.prepareExcursion();
+            /*while(party[ap].crawlOut(md));
             museum.rollACanvas();
-
-            boolean site = false;
-            while(!site){
-                if (ap==0){
-                    ap0.reverseDirection(member);
-                    site = ap0.crawlOut(member);
-                }else{
-                    ap1.reverseDirection();
-                    site = ap1.crawlOut(member);
-                }
-            }
-            
-            ccs.handACanvas();
+            while(party[ap].crawlOut(md));
+            ccs.handACanvas();*/
         }
 
     }

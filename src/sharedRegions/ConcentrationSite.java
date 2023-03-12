@@ -18,32 +18,51 @@ public class ConcentrationSite {
      */
     private int waitingThieves;
 
+
     /**
      * Excursion party selected
      */
     private int excursion;
 
     /**
-     * Results 
+     * Master is going to sum up the results 
      */
     private boolean results;
 
     /**
-     * Construct assault party 
+     * Summon thieve to an assault party
      */
-    private int constructAP;
+    private int summon;
 
     /**
-     * Preparing thieve to an assault party
+     * Preparingassault Party
      */
-    private int preparing;
+    private int preparingAP;
 
     /**
-     * Assault party to join
+     * Number of members on Assault party 0
      */
-    private int ap;
+    private int ap0;
+
+    /**
+     * Indicate which the Assault party is heisting
+     */
+    private int rooms[];
+
+    /**
+     * Number of members on Assault party 1
+     */
+    private int ap1;
 
 
+    /**
+     * Return one assault party available
+     * 
+     * @return assault party
+     */
+    public int getAssautlParty(){
+        return rooms[0]<0? 0:1;
+    }
 
     /**
      * Reference to the general repository.
@@ -67,9 +86,12 @@ public class ConcentrationSite {
         this.waitingThieves = 0;
         this.excursion = -1;
         this.results = false;
-        this.constructAP = 0;
-        this.preparing = 0;
-        this.ap = -1;
+        this.summon = 0;
+        this.preparingAP = -1;
+        this.ap0 = 0;
+        this.ap1 = 0;
+        this.rooms = new int[2];
+        for(int i=0; i<2; i++) rooms[i]=-1; 
     }
 
 
@@ -81,43 +103,35 @@ public class ConcentrationSite {
      * The master thief appraise the situation of how the heist is going 
      * and takes a decision of is next step based on that
      * 
-     * @return
+     * @param roomState indicate if all rooms are empty
+     * @return the master decision
      */
-    public synchronized int appraiseSit() {
-        //ja foi tudo roubado
-        if(false) return 3;
+    public synchronized int appraiseSit(boolean roomState) {
+        if(roomState) return 3;
+        if(waitingThieves>=SimulConsts.E && (rooms[0]<0 || rooms[1]<0)) return 1;
+        if(rooms[0]>=0 || rooms[1]>=0) return 2;
 
-        //se a fila estiver vazia e algum ap tiver em acçao
-        //if(waitingThieves==0 && !avb_ap0 || !avb_ap1)
-        if(waitingThieves==0)
-            return 2;
-
-        while (waitingThieves==0) {
+        while (waitingThieves<SimulConsts.E) {
             try {  wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-        
-        constructAP++;
-        if(constructAP>=SimulConsts.E) return 1;
-
-        return 0;
+        return 1;
     }
-
-
-
 
 
     /**
      * The master thief prepares an assault party to lauch in excursion
+     * 
+     * @param ap assault party to prepare
+     * @param room to assault
      */
-    public synchronized void prepareAssaultParty(int ap) {
-        this.ap = ap;
+    public synchronized void prepareAssaultParty(int ap, int room) {
+        preparingAP = ap;
         while (excursion < SimulConsts.E) {
             try {
-                preparing = thievesQueue.read();
+                summon = thievesQueue.read();
                 waitingThieves--;
             } catch (Exception e) {}
             notifyAll();
@@ -127,8 +141,9 @@ public class ConcentrationSite {
                 e.printStackTrace(); 
             }
         }
-        this.ap = -1;
         excursion -= SimulConsts.E;
+        preparingAP = -1;
+        rooms[ap] = room;
 
         // Update Master state
         ((Master) Thread.currentThread()).setMasterState(MasterStates.ASSEMBLING_A_GROUP);
@@ -150,7 +165,10 @@ public class ConcentrationSite {
         ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CRAWLING_INWARDS);
         repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
 
-        return excursion*10+ap;
+        //if(ap0<SimulConsts.E && !heist0){ ap0++; return 0; } 
+        //if(ap1<SimulConsts.E && !heist1){ ap1++; return 1; }
+        if(preparingAP==0) ap0++; else ap1++;
+        return preparingAP;
     }
 
 
@@ -159,9 +177,14 @@ public class ConcentrationSite {
     /**
      * The ordinary thief indicates to the master that he is available
      * 
+     * @param ap assault party from which the ordinary thieve work before
      * @return master service decision
      */
-    public synchronized boolean amINeeded(){
+    public synchronized boolean amINeeded(int ap){
+        if(ap==0)
+            if(--ap0==0) rooms[ap]=-1;
+        else if(ap==1)
+            if(--ap1==0) rooms[ap]=-1;
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         try {
@@ -171,7 +194,7 @@ public class ConcentrationSite {
         notifyAll();
 
 
-        while(preparing!=ordinaryId || !results){
+        while(summon!=ordinaryId || !results){
 			try { wait();
 			} catch (InterruptedException e) {
 				GenericIO.writelnString(" "+e.getMessage());
@@ -184,7 +207,7 @@ public class ConcentrationSite {
 		((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CONCENTRATION_SITE);
 		repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
 
-        return preparing==ordinaryId;
+        return summon==ordinaryId;
     }
 
 
@@ -201,4 +224,7 @@ public class ConcentrationSite {
         repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
 
     }
+
+
+
 }
