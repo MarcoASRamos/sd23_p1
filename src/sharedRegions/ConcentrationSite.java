@@ -20,9 +20,9 @@ public class ConcentrationSite {
 
 
     /**
-     * Excursion party selected
+     * Excursion thieve to participate in a party
      */
-    private int excursion;
+    private int excursionId;
 
     /**
      * Master is going to sum up the results 
@@ -39,10 +39,12 @@ public class ConcentrationSite {
      */
     private int preparingAP;
 
+
+
     /**
-     * Number of members on Assault party 0
+     * Number of members on Assault parties
      */
-    private int ap0;
+    private int[] party;
 
     /**
      * Indicate which the Assault party is heisting
@@ -50,19 +52,25 @@ public class ConcentrationSite {
     private int rooms[];
 
     /**
-     * Number of members on Assault party 1
+     * Getter room assign to the assault party
+     * 
+     * @param ap assault party
+     * @return room address to heist
      */
-    private int ap1;
-
+    public synchronized int getRoom(int ap){
+        return rooms[ap];
+    }
 
     /**
      * Return one assault party available
      * 
      * @return assault party
      */
-    public int getAssautlParty(){
+    public synchronized int getAssautlParty(){
         return rooms[0]<0? 0:1;
     }
+
+
 
     /**
      * Reference to the general repository.
@@ -84,14 +92,16 @@ public class ConcentrationSite {
         }
 
         this.waitingThieves = 0;
-        this.excursion = -1;
+        this.excursionId = -1;
         this.results = false;
-        this.summon = 0;
+        this.summon = -1;
         this.preparingAP = -1;
-        this.ap0 = 0;
-        this.ap1 = 0;
+        this.party = new int[2];
         this.rooms = new int[2];
-        for(int i=0; i<2; i++) rooms[i]=-1; 
+        for(int i=0; i<2; i++){
+            party[i] = 0;
+            rooms[i] = -1; 
+        } 
     }
 
 
@@ -129,19 +139,26 @@ public class ConcentrationSite {
      */
     public synchronized void prepareAssaultParty(int ap, int room) {
         preparingAP = ap;
-        while (excursion < SimulConsts.E) {
-            try {
-                summon = thievesQueue.read();
-                waitingThieves--;
-            } catch (Exception e) {}
-            notifyAll();
+        int recruited = 0;
 
+        while (recruited < SimulConsts.E) {
+            if(excursionId==summon){
+                recruited++;
+                try {
+                    summon = thievesQueue.read();
+                    waitingThieves--;
+                } catch (Exception e) {}
+                notifyAll();
+            } 
+            
+            System.out.println("summoning ord "+summon);
             try { wait();
             } catch (InterruptedException e) { 
                 e.printStackTrace(); 
             }
         }
-        excursion -= SimulConsts.E;
+        summon = -1;
+        excursionId = -1;
         preparingAP = -1;
         rooms[ap] = room;
 
@@ -157,17 +174,15 @@ public class ConcentrationSite {
      * @return joined assault party
      */
     public synchronized int prepareExcursion() {
-        excursion++;
-        notifyAll();
-
         // Update Ordinary state
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CRAWLING_INWARDS);
         repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
 
-        //if(ap0<SimulConsts.E && !heist0){ ap0++; return 0; } 
-        //if(ap1<SimulConsts.E && !heist1){ ap1++; return 1; }
-        if(preparingAP==0) ap0++; else ap1++;
+        excursionId = ordinaryId;
+        notifyAll();
+
+        party[preparingAP]++;
         return preparingAP;
     }
 
@@ -181,10 +196,7 @@ public class ConcentrationSite {
      * @return master service decision
      */
     public synchronized boolean amINeeded(int ap){
-        if(ap==0)
-            if(--ap0==0) rooms[ap]=-1;
-        else if(ap==1)
-            if(--ap1==0) rooms[ap]=-1;
+        if(ap>0 && --party[ap]==0) rooms[ap]=-1;
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         try {
@@ -194,7 +206,8 @@ public class ConcentrationSite {
         notifyAll();
 
 
-        while(summon!=ordinaryId || !results){
+        while(summon!=ordinaryId && !results){
+            System.out.println("ord "+ordinaryId+": waiting to be summon");
 			try { wait();
 			} catch (InterruptedException e) {
 				GenericIO.writelnString(" "+e.getMessage());
@@ -216,8 +229,9 @@ public class ConcentrationSite {
      * All the paitings were finally robbed, now its time to count the gains
      */
     public synchronized void sumUpResults() {
-        notifyAll();
         results = true;
+        notifyAll();
+        
 
         // Update Master state
         ((Master) Thread.currentThread()).setMasterState(MasterStates.PRESENTING_THE_REPORT);

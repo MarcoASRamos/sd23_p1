@@ -127,32 +127,38 @@ public class Master extends Thread {
      */
     @Override
     public void run() {
-        int r=0;
-        boolean[] rooms = new boolean[SimulConsts.N];
-        for(int i=0; i<SimulConsts.N; i++)
-            rooms[i] = false;
+        int room = ccs.getRoomIdx();
 
+        System.out.println("startOpr");
         ccs.startOperation();
         
         boolean assault = true;
         while (assault) {
-            switch (cs.appraiseSit(r>=SimulConsts.N)) {
+            System.out.println("AppraiseSit");
+            room = ccs.getRoomIdx();
+            switch (cs.appraiseSit(room>=SimulConsts.N)){
                 case 1:
                     int ap = cs.getAssautlParty();
-                    cs.prepareAssaultParty(ap, r);
-                    //party[ap].sendAssaultParty(cs.getRoom());
+                    System.out.println("GetAp "+ap);
+                    System.out.println("PrepareAp");
+                    cs.prepareAssaultParty(ap, room);
+                    System.out.println("SendAp");
+                    party[ap].sendAssaultParty(cs.getRoom(ap));
                     break;
 
 
 
                 case 2:
+                    System.out.println("Rest");
                     ccs.takeARest();
+                    System.out.println("CollectACanvas");
                     ccs.collectACanvas();
                     break;
 
 
 
                 case 3:
+                    System.out.println("SumUpResults");
                     cs.sumUpResults();
                     assault = false;
                     break;

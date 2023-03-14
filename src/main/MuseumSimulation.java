@@ -29,9 +29,12 @@ public class MuseumSimulation{
         System.out.println("The Restaurant Simulation");
         // problem initialization
         repos = new GeneralRepos("logger");
+        int[] rooms = new int[SimulConsts.N];
+        for(int i=0; i<SimulConsts.N; i++) 
+            rooms[i] = SimulConsts.d +(int)(Math.random()* (SimulConsts.D-SimulConsts.d)+1);
         party = new AssaultParty[2];
         for(int i=0; i<2; i++)
-            party[i] = new AssaultParty(repos);
+            party[i] = new AssaultParty(repos, rooms);
         cs = new ConcentrationSite(repos);
         ccs = new ControlCollectionSite(repos);
         museum = new Museum(repos);
@@ -45,7 +48,7 @@ public class MuseumSimulation{
         System.out.println("Master start");
         for (int i = 0; i < SimulConsts.M-1; i++) {
             ordinaries[i].start();
-            System.out.println("Ordinary "+ i +" start");
+            //System.out.println("Ordinary "+ i +" start");
         }
 
         // waiting for the end of the simulation

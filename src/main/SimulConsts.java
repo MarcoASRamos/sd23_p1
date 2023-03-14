@@ -20,24 +20,18 @@ public class SimulConsts {
 
      public static final int MD = 6;
 
-    /**
-     * Minimum displacement
-     */
-
-     public static final int md = 6;
-
 
     /**
      *  Maximum number of paitings hanging in each room
      */
 
-     public static final int H = 16;
+     public static final int P = 16;
 
      /**
      *  Minimum number of paitings hanging in each room
      */
 
-     public static final int h = 8;
+     public static final int p = 8;
 
 
     /**
@@ -62,7 +56,7 @@ public class SimulConsts {
      *  Maximum separation limit between thieves crawling in line
      */
 
-     public static final int S = 5;
+     public static final int S = 3;
 
     
 

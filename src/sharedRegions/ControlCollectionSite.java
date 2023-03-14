@@ -13,24 +13,39 @@ public class ControlCollectionSite {
     private boolean handed;
 
     /**
+     * Indicate if the thieve gives a canvas or is empty
+     */
+    private int canvas;
+
+    /**
      * Indicate master thieve as collected the canvas
      */
     private boolean collected;
 
     /**
-     * State of each room, if is empty or not
+     * Indicate the room assaulted
+     */
+    private int room;
+
+    /**
+     * State of each room, if is full or not
      */
     private boolean[] rooms;
+
+    /**
+     * Index of rooms still with paintings
+     */
+    private int idx;
 
     /**
      * Getter room state list
      * 
      * @return room state list
      */
-    public synchronized boolean getRoomsState(){
-        for(int i=0; i<SimulConsts.N; i++)
-            if(rooms[i]) return false;
-        return true;
+    public synchronized int getRoomIdx(){
+        for(;idx<SimulConsts.N; idx++)
+            if(rooms[idx]) break;
+        return idx;
     }
 
     /**
@@ -46,16 +61,21 @@ public class ControlCollectionSite {
     public ControlCollectionSite(GeneralRepos repos){
         
         this.repos = repos;
+        this.canvas = -1;
+        this.room = -1;
+        this.idx = 0;
         this.rooms = new boolean[SimulConsts.N];
-        for(int i=0; i<SimulConsts.N; i++)
-            rooms[i]=true;
-        
+        for(int i=0; i<SimulConsts.N; i++) rooms[i]=true;
+        this.handed = false;
+        this.collected = false;
     }
 
     
 
 
-
+    /**
+     * Master starts the heist the museum operation
+     */
     public synchronized void startOperation(){
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
@@ -63,8 +83,10 @@ public class ControlCollectionSite {
     }
 
 
-
-    public synchronized int takeARest(){
+    /**
+     * Master hide until return of the ordinaries 
+     */
+    public synchronized void takeARest(){
 
         while(!handed){
 			try { wait();
@@ -73,19 +95,38 @@ public class ControlCollectionSite {
 			}
 		}
 
+        if(canvas==0) rooms[room] = false;
+        canvas = -1; 
+        room = -1;
+
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.WAITING_FOR_GROUP_ARRIVAL);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());
 
-        return 0;
     }
 
 
 
+    /**
+     * Ordinary thieves takes the canvas out of the cylinder and hands it to the master thief, or tells her he is coming empty-handed
+     * 
+     * @param canvas or empty handed
+     * @param room heisted by the thief
+     */
+    public synchronized void handACanvas(int canvas, int room){
 
-    public synchronized void handACanvas(){
-        notifyAll();
+        while(handed){
+			try { wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
         handed = true;
+        this.canvas = canvas;
+        this.room = room;
+        notifyAll();
+        
 
         while(!collected){
 			try { wait();
@@ -100,10 +141,14 @@ public class ControlCollectionSite {
 
 
 
-
+    /**
+     * The master thief stores it in the back of a van
+     */
     public synchronized void collectACanvas(){
-        notifyAll();
         collected = true;
+        handed = false;
+        notifyAll();
+        
 
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);

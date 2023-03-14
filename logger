@@ -5,3 +5,21 @@ Stat    Stat S MD   Stat S MD   Stat S MD   Stat S MD   Stat S MD   Stat S MD
                 Assault party 1                                 Assault party 2                             Museum
     Elem 1          Elem 2          Elem 3          Elem 1          Elem 2          Elem 3      Room 1   Room 2   Room 3   Room 4   Room 5
 RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT
+PTH       CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD       CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD       CNS W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN W 5    CIN W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN W 5    CIN W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN W 5    CIN W 3    CIN W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+AAG     CIN W 5    CIN W 3    CIN W 6      CNS W 4      CNS W 4      CNS W 3
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      

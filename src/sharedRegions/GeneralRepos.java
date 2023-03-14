@@ -84,6 +84,7 @@ public class GeneralRepos {
         MDs = new int[SimulConsts.M-1];
         for (int i = 0; i < SimulConsts.M-1; i++){
             ordinaryState[i] = OrdinaryStates.CONCENTRATION_SITE;
+            ordinarySituation[i] = 'W';
             MDs[i] = 0;
         }
 
@@ -297,38 +298,38 @@ public class GeneralRepos {
 
         switch (masterState){
             case MasterStates.PLANNING_THE_HEIST:
-                lineStatus += " PTH ";
+                lineStatus += "PTH ";
                 break;
             case MasterStates.DECIDING_WHAT_TO_DO:
-                lineStatus += " DWTD ";
+                lineStatus += "DWTD ";
                 break;
             case MasterStates.ASSEMBLING_A_GROUP:
-                lineStatus += " AAG ";
+                lineStatus += "AAG ";
                 break;
             case MasterStates.WAITING_FOR_GROUP_ARRIVAL:
-                lineStatus += " WFGA ";
+                lineStatus += "WFGA ";
                 break;
             case MasterStates.PRESENTING_THE_REPORT:
-                lineStatus += " PTR ";
+                lineStatus += "PTR ";
                 break;
         }
 
         for (int i = 0; i < SimulConsts.M-1; i++)
             switch (ordinaryState[i]) {
                 case OrdinaryStates.CONCENTRATION_SITE:
-                    lineStatus += "  CNS "+ordinarySituation[i]+" "+MDs[i];
+                    lineStatus += "      CNS "+ordinarySituation[i]+" "+MDs[i];
                     break;
                 case OrdinaryStates.CRAWLING_INWARDS:
-                    lineStatus += "  CIN "+ordinarySituation[i]+" "+MDs[i];
+                    lineStatus += "    CIN "+ordinarySituation[i]+" "+MDs[i];
                     break;
                 case OrdinaryStates.AT_A_ROOM:
-                    lineStatus += "  AAR "+ordinarySituation[i]+" "+MDs[i];
+                    lineStatus += "    AAR "+ordinarySituation[i]+" "+MDs[i];
                     break;
                 case OrdinaryStates.CRAWLING_OUTWARDS:
-                    lineStatus += "  COUT "+ordinarySituation[i]+" "+MDs[i];
+                    lineStatus += "    COUT "+ordinarySituation[i]+" "+MDs[i];
                     break;
                 case OrdinaryStates.COLLECTION_SITE:
-                    lineStatus += "  CLS "+ordinarySituation[i]+" "+MDs[i];
+                    lineStatus += "    CLS "+ordinarySituation[i]+" "+MDs[i];
                     break;
             }
             
@@ -337,12 +338,12 @@ public class GeneralRepos {
 
         String.format("RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT");
         for(int i=0; i<SimulConsts.M-1; i++)
-            line2Status +=  elements[i][1]+" "+elements[i][2]+" "+elements[i][3]+" "+elements[i][4]+"   ";     
+            line2Status +=  elements[i][0]+" "+elements[i][1]+" "+elements[i][2]+" "+elements[i][3]+"      ";     
 
         for(int i=0; i<SimulConsts.N; i++)
-            line2Status +=  paintings[i]+" "+distances[i]+"   ";
+            line2Status +=  paintings[i]+" "+distances[i]+"      ";
 
-        log.writeString(line2Status);   // status of shared regions
+        log.writelnString(line2Status);   // status of shared regions
 
 
         if (!log.close ()) { 
