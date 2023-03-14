@@ -137,33 +137,13 @@ public class GeneralRepos {
         reportStatus ();
     }
 
-
     /**
-     * Set number of paitings on the walls
-     * @param paitings on each room
+     * Set ordinary situation
      */
-    public synchronized void setRoomPaitings(int[] paitings){
-        this.paintings = paitings;
+    public synchronized void setOrdinarySituation (int id, char sit) {
+        ordinarySituation[id] = sit;
+        reportStatus ();
     }
-
-    /**
-     * Update number of paitings on the walls
-     * @param room of the museum
-     * @param paitings on each room
-     */
-    public synchronized void updateRoomPaitings(int room, int paitings){
-        this.paintings[room] = paitings;
-    }
-
-
-    /**
-     * Set distance of the rooms
-     * @param distances of each room
-     */
-    public synchronized void setRoomDistances(int[] distances){
-        this.distances = distances;
-    }
-
 
     /**
      * Set ordinary thieves maximum distances
@@ -173,6 +153,7 @@ public class GeneralRepos {
     public synchronized void setOrdinariesMD(int id, int md){
         this.MDs[id] = md;
     }
+
 
     /**
      * Set Assault Party element
@@ -201,8 +182,9 @@ public class GeneralRepos {
      * @param elem index
      * @param canvas carry
      */
-    public synchronized void updateCanvas(int elem, int canvas){
+    public synchronized void setCanvas(int elem, int canvas){
         elements[elem][3] = canvas;
+        reportStatus ();
     }
 
 
@@ -212,9 +194,40 @@ public class GeneralRepos {
      * @param elem index
      * @param pos actual position of the thieve in line
      */
-    public synchronized void updatePosition(int elem, int pos){
+    public synchronized void setPosition(int elem, int pos){
         elements[elem][2] = pos;
+        reportStatus ();
     }
+
+
+    /**
+     * Update number of paitings on the walls
+     * @param room of the museum
+     * @param paitings on each room
+     */
+    public synchronized void setRoomPaitings(int room, int paitings){
+        this.paintings[room] = paitings;
+        reportStatus ();
+    }
+
+    /**
+     * Set number of paitings on the walls
+     * @param paitings on each room
+     */
+    public synchronized void setRoomPaitings(int[] paitings){
+        this.paintings = paitings;
+        reportStatus ();
+    }
+
+
+    /**
+     * Set distance of the rooms
+     * @param distances of each room
+     */
+    public synchronized void setRoomDistances(int[] distances){
+        this.distances = distances;
+    }
+    
 
 
 

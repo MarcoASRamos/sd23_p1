@@ -133,11 +133,11 @@ public class Ordinary extends Thread{
             System.out.println("ord "+ordinaryId+": CrawlIn");
             int memberId = party[ap].assignMember();
             System.out.println("ord "+ordinaryId+" is on party "+ap+" with member id "+memberId);
-            while(party[ap].crawlIn(memberId, md)){};
+            while(party[ap].crawlIn(ap, memberId, md)){};
             System.out.println("\n\nord "+ordinaryId+": RollCanvas\n\n");
             /*int canvas = museum.rollACanvas();
             System.out.println("ord "+ordinaryId+": CrawlOut");
-            /*while(party[ap].crawlOut(md));
+            /*while(party[ap].crawlOut(ap, memberId, md));
             System.out.println("ord "+ordinaryId+": HandCanvas");
             /*ccs.handACanvas(canvas, cs.getRoom(ap));*/
         }

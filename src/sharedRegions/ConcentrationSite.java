@@ -183,6 +183,7 @@ public class ConcentrationSite {
         notifyAll();
 
         party[preparingAP]++;
+        repos.setOrdinarySituation(ordinaryId, 'P');
         return preparingAP;
     }
 
@@ -196,9 +197,10 @@ public class ConcentrationSite {
      * @return master service decision
      */
     public synchronized boolean amINeeded(int ap){
-        if(ap>0 && --party[ap]==0) rooms[ap]=-1;
+        if(ap>=0 && --party[ap]==0) rooms[ap]=-1;
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+        repos.setOrdinarySituation(ordinaryId, 'W');
         try {
             thievesQueue.write(ordinaryId);
             waitingThieves++;

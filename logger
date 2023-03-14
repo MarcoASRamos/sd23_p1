@@ -9,17 +9,57 @@ PTH       CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
 DWTD       CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD       CNS W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD       CNS W 3      CNS W 0      CNS W 0      CNS W 0      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD     CIN W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD       CNS W 3      CNS W 3      CNS W 0      CNS W 0      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD     CIN W 5      CNS W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD       CNS W 3      CNS W 3      CNS W 4      CNS W 0      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD     CIN W 5    CIN W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD       CNS W 3      CNS W 3      CNS W 4      CNS W 0      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD     CIN W 5    CIN W 3      CNS W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD     CIN W 3      CNS W 3      CNS W 4      CNS W 6      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-DWTD     CIN W 5    CIN W 3    CIN W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD     CIN P 3      CNS W 3      CNS W 4      CNS W 6      CNS W 0      CNS W 0
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
-AAG     CIN W 5    CIN W 3    CIN W 6      CNS W 4      CNS W 4      CNS W 3
+DWTD     CIN P 3      CNS W 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3      CNS W 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3      CNS W 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3      CNS W 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN W 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3      CNS W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN W 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+AAG     CIN P 3    CIN P 3    CIN P 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6      CNS W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN W 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN P 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN P 5      CNS W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN P 5    CIN W 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN P 5    CIN P 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4      CNS W 6    CIN P 5    CIN P 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4    CIN W 6    CIN P 5    CIN P 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+DWTD     CIN P 3    CIN P 3    CIN P 4    CIN P 6    CIN P 5    CIN P 5
+-1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      
+AAG     CIN P 3    CIN P 3    CIN P 4    CIN P 6    CIN P 5    CIN P 5
 -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      -1 -1 -1 0      0 0      0 0      0 0      0 0      0 0      

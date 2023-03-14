@@ -119,11 +119,12 @@ public class AssaultParty {
     /**
      * The assault party get in line and crawl to the room of the museum
      * 
+     * @param ap number
      * @param member id of the thieve in the crawl line
      * @param md maximum distance capable by the thive
      * @return true if the thieve get to the room
      */
-    public synchronized boolean crawlIn(int member, int md){
+    public synchronized boolean crawlIn(int ap, int member, int md){
         System.out.println("Member "+member+" enter in line");
         int move=1; 
 
@@ -152,9 +153,14 @@ public class AssaultParty {
         }
 
         pos[member]+=move;
+        if(pos[member>pos[member]]) pos[member] = rooms[room];
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+        repos.setPosition(ap*SimulConsts.E + member);
+
         System.out.println("Member "+member+" position "+pos[member]);
         notifyAll();
+
+        
 
         if(pos[member]>=rooms[room]){
             //Update Ordinary state
@@ -170,11 +176,12 @@ public class AssaultParty {
     /**
      * The assault party get in line and crawl back to the site
      * 
+     * @param ap number
      * @param member id of the thieve in the crawl line
      * @param md maximum distance capable by the thive
      * @return true if the thieve get to the site
      */
-    public synchronized boolean crawlOut(int member, int md){
+    public synchronized boolean crawlOut(int ap, int member, int md){
         int move=1; 
         
         for(int i=md; i>1; i++)
@@ -197,11 +204,13 @@ public class AssaultParty {
         }
 
         pos[member]-=move;
+        if(pos[member]<0) pos[member]=0;
         notifyAll();
+        int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+        repos.setPosition(ap*SimulConsts.E + member, pos[member]);
 
         if(pos[member]<=0){
             //Update Ordinary state
-		    int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
 		    ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.COLLECTION_SITE);
 		    repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
         }
@@ -217,7 +226,7 @@ public class AssaultParty {
         test[member] = p;
 
         System.out.println("position "+pos);
-        //System.exit(0);
+        System.exit(0);
 
         for(int i=0; i<SimulConsts.E-1; i++){
             for(int j=1; i<SimulConsts.E; j++)
