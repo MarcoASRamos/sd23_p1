@@ -150,8 +150,7 @@ public class ConcentrationSite {
                 } catch (Exception e) {}
                 notifyAll();
             } 
-            
-            System.out.println("summoning ord "+summon);
+
             try { wait();
             } catch (InterruptedException e) { 
                 e.printStackTrace(); 
@@ -209,7 +208,6 @@ public class ConcentrationSite {
 
 
         while(summon!=ordinaryId && !results){
-            System.out.println("ord "+ordinaryId+": waiting to be summon");
 			try { wait();
 			} catch (InterruptedException e) {
 				GenericIO.writelnString(" "+e.getMessage());

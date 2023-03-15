@@ -32,6 +32,7 @@ public class MuseumSimulation{
         int[] rooms = new int[SimulConsts.N];
         for(int i=0; i<SimulConsts.N; i++) 
             rooms[i] = SimulConsts.d +(int)(Math.random()* (SimulConsts.D-SimulConsts.d)+1);
+        repos.setRoomDistances(rooms);
         party = new AssaultParty[2];
         for(int i=0; i<2; i++)
             party[i] = new AssaultParty(repos, rooms);

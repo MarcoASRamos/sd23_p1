@@ -129,21 +129,20 @@ public class Master extends Thread {
     public void run() {
         int room = ccs.getRoomIdx();
 
-        System.out.println("startOpr");
+        //System.out.println("startOpr");
         ccs.startOperation();
         
         boolean assault = true;
         while (assault) {
-            System.out.println("AppraiseSit");
+            //System.out.println("AppraiseSit");
             room = ccs.getRoomIdx();
             switch (cs.appraiseSit(room>=SimulConsts.N)){
                 case 1:
                     int ap = cs.getAssautlParty();
-                    System.out.println("GetAp "+ap);
-                    System.out.println("PrepareAp");
+                    //System.out.println("PrepareAp "+ap);
                     cs.prepareAssaultParty(ap, room);
-                    System.out.println("SendAp");
-                    party[ap].sendAssaultParty(cs.getRoom(ap));
+                    if(ap==0) System.out.println("SendAp "+ap);
+                    if(ap==0) party[ap].sendAssaultParty(cs.getRoom(ap));
                     break;
 
 

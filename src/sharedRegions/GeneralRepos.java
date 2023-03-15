@@ -172,7 +172,7 @@ public class GeneralRepos {
     public synchronized void resetApElement(int elem){
         elements[elem][0] = -1;
         elements[elem][1] = -1;
-        elements[elem][2] = -1;
+        elements[elem][2] = 0;
         elements[elem][3] = 0;
     }
 

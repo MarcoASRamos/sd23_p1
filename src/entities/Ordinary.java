@@ -126,20 +126,25 @@ public class Ordinary extends Thread{
         int ap=-1, md = 2 + (int)(Math.random() * (SimulConsts.MD-2)+1);
         repos.setOrdinariesMD(ordinaryId, md);
 
-        System.out.println("ord "+ordinaryId+": AmIneed");
+        //System.out.println("ord "+ordinaryId+": AmIneed");
         while(cs.amINeeded(ap)){
-            System.out.println("ord "+ordinaryId+": PrepExcursion");
+            //System.out.println("ord "+ordinaryId+": PrepExcursion");
             ap = cs.prepareExcursion();
-            System.out.println("ord "+ordinaryId+": CrawlIn");
+            //System.out.println("ord "+ordinaryId+": CrawlIn");
             int memberId = party[ap].assignMember();
             System.out.println("ord "+ordinaryId+" is on party "+ap+" with member id "+memberId);
-            while(party[ap].crawlIn(ap, memberId, md)){};
-            System.out.println("\n\nord "+ordinaryId+": RollCanvas\n\n");
+            boolean atRoom = true;
+            while(atRoom) atRoom = party[ap].crawlIn(ap, memberId, md);
+            if(memberId==0) party[ap].resetCrawl();
+            System.out.println("ord "+ordinaryId+": RollCanvas\n\n");
             /*int canvas = museum.rollACanvas();
             System.out.println("ord "+ordinaryId+": CrawlOut");
-            /*while(party[ap].crawlOut(ap, memberId, md));
+            boolean atSite = true;
+            /*while(atSite) atSite = party[ap].crawlOut(ap, memberId, md);
+            //if(memberId==0) party[ap].resetCrawl();
             System.out.println("ord "+ordinaryId+": HandCanvas");
             /*ccs.handACanvas(canvas, cs.getRoom(ap));*/
+            System.out.println("ord "+ordinaryId+": AmIneed");
         }
         System.out.println("ord "+ordinaryId+": end life cycle");
     }
