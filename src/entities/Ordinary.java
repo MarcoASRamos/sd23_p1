@@ -3,10 +3,10 @@ package entities;
 import main.SimulConsts;
 import sharedRegions.*;
 
-public class Ordinary extends Thread{
+public class Ordinary extends Thread {
 
     /**
-     *  Ordinary Name
+     * Ordinary Name
      */
     private String name;
 
@@ -47,12 +47,14 @@ public class Ordinary extends Thread{
 
     /**
      * Instantiation of a ordinary thread.
-     * @param name  ordinary Name
+     * 
+     * @param name          ordinary Name
      * @param ordinaryId    ordinary Id
      * @param ordinaryState ordinary state
-     * @param repos Reference to GeneralRepos
+     * @param repos         Reference to GeneralRepos
      */
-    public Ordinary(String name, int ordinaryId, int ordinaryState, GeneralRepos repos, ConcentrationSite cs, ControlCollectionSite ccs, AssaultParty[] party, Museum museum) {
+    public Ordinary(String name, int ordinaryId, int ordinaryState, GeneralRepos repos, ConcentrationSite cs,
+            ControlCollectionSite ccs, AssaultParty[] party, Museum museum) {
         this.name = name;
         this.ordinaryState = ordinaryState;
         this.ordinaryId = ordinaryId;
@@ -65,6 +67,7 @@ public class Ordinary extends Thread{
 
     /**
      * Get ordinary name
+     * 
      * @return ordinary name
      */
     public String getOrdinaryName() {
@@ -73,6 +76,7 @@ public class Ordinary extends Thread{
 
     /**
      * Set ordinary name
+     * 
      * @param name ordinary name
      */
     public void setOrdinaryName(String name) {
@@ -81,6 +85,7 @@ public class Ordinary extends Thread{
 
     /**
      * Get ordinary Id
+     * 
      * @return ordinary Id
      */
     public int getOrdinaryId() {
@@ -89,6 +94,7 @@ public class Ordinary extends Thread{
 
     /**
      * Set ordinary Id
+     * 
      * @param ordinaryId ordinary Id
      */
     public void setOrdinaryId(int ordinaryId) {
@@ -97,6 +103,7 @@ public class Ordinary extends Thread{
 
     /**
      * Get ordinary State
+     * 
      * @return ordinary state
      */
     public int getOrdinaryState() {
@@ -105,6 +112,7 @@ public class Ordinary extends Thread{
 
     /**
      * Set ordinary State
+     * 
      * @param ordinaryState ordinary state
      */
     public void setOrdinaryState(int ordinaryState) {
@@ -123,42 +131,38 @@ public class Ordinary extends Thread{
      */
     @Override
     public void run() {
-        int room, canvas, ap=-1, md = 2 + (int)(Math.random() * (SimulConsts.MD-2)+1);
+        int room, canvas, ap = -1, md = 2 + (int) (Math.random() * (SimulConsts.MD - 2) + 1);
         repos.setOrdinariesMD(ordinaryId, md);
 
-        //System.out.println("ord "+ordinaryId+": AmIneed");
-        while(cs.amINeeded(ap)){
-            //System.out.println("ord "+ordinaryId+": PrepExcursion");
+        // System.out.println("ord "+ordinaryId+": AmIneed");
+        while (cs.amINeeded(ap)) {
+            // System.out.println("ord "+ordinaryId+": PrepExcursion");
             ap = cs.prepareExcursion();
 
-            System.out.println("ord "+ordinaryId+": CrawlIn");
-            int memberId = party[ap].assignMember();
-            System.out.println("ord "+ordinaryId+" is on party "+ap+" with member id "+memberId);
+            System.out.println("ord " + ordinaryId + ": CrawlIn");
+            int memberId = party[ap].assignMember(ap);
+            System.out.println("ord " + ordinaryId + " is on party " + ap + " with member id " + memberId);
             boolean atRoom = true;
-            while(atRoom) atRoom = party[ap].crawlIn(ap, memberId, md);
+            while (atRoom)
+                atRoom = party[ap].crawlIn(ap, memberId, md);
 
-
-            
             room = party[ap].getRoom();
-            System.out.println("ord "+ordinaryId+": RollCanvas\n\n");
+            System.out.println("ord " + ordinaryId + ": RollCanvas\n\n");
             canvas = museum.rollACanvas(room);
 
-
-
-            System.out.println("ord "+ordinaryId+": CrawlOut");
-            memberId = party[ap].assignMember();
+            System.out.println("ord " + ordinaryId + ": CrawlOut");
+            memberId = party[ap].assignMember(ap);
             party[ap].reverseDirection(memberId);
             boolean atSite = true;
-            while(atSite) atSite = party[ap].crawlOut(ap, memberId, md);
+            while (atSite)
+                atSite = party[ap].crawlOut(ap, memberId, md);
 
+            System.out.println("ord " + ordinaryId + ": HandCanvas");
+            ccs.handACanvas(canvas, cs.getRoom(ap));
+            System.out.println("ord " + ordinaryId + ": AmIneed");
 
-
-            System.out.println("ord "+ordinaryId+": HandCanvas");
-            /*ccs.handACanvas(canvas, cs.getRoom(ap));
-            System.out.println("ord "+ordinaryId+": AmIneed");*/
-            break;
         }
-        System.out.println("ord "+ordinaryId+": end life cycle");
+        System.out.println("ord " + ordinaryId + ": end life cycle");
     }
-    
+
 }
