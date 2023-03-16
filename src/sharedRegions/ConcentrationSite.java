@@ -39,8 +39,6 @@ public class ConcentrationSite {
      */
     private int preparingAP;
 
-
-
     /**
      * Number of members on Assault parties
      */

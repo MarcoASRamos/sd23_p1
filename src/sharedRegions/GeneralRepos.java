@@ -199,17 +199,6 @@ public class GeneralRepos {
         reportStatus ();
     }
 
-
-    /**
-     * Update number of paitings on the walls
-     * @param room of the museum
-     * @param paitings on each room
-     */
-    public synchronized void setRoomPaitings(int room, int paitings){
-        this.paintings[room] = paitings;
-        reportStatus ();
-    }
-
     /**
      * Set number of paitings on the walls
      * @param paitings on each room

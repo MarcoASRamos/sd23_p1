@@ -28,6 +28,7 @@ public class Museum {
         this.paintings = new int[SimulConsts.N];
         for(int i=0; i<SimulConsts.N; i++) 
             paintings[i] = SimulConsts.p +(int)(Math.random() * (SimulConsts.P-SimulConsts.p)+1); 
+        repos.setRoomPaitings(paintings);
     }
 
     /**

@@ -134,7 +134,7 @@ public class Master extends Thread {
         
         boolean assault = true;
         while (assault) {
-            //System.out.println("AppraiseSit");
+            System.out.println("AppraiseSit");
             room = ccs.getRoomIdx();
             switch (cs.appraiseSit(room>=SimulConsts.N)){
                 case 1:

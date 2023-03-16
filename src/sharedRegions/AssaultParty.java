@@ -28,6 +28,13 @@ public class AssaultParty {
     private int room;
 
     /**
+     * Getter room
+     */
+    public synchronized int getRoom(){
+        return room;
+    }
+
+    /**
      * Sended assault party
      */
     private boolean sended;
@@ -38,16 +45,19 @@ public class AssaultParty {
     private boolean init;
     
     /**
-     * The movement of Crawl has been initializated
+     * The movement of Crawl in has been initializated
      */
-    private boolean crawl;
+    private boolean crawlin;
 
     /**
-     * Reset the indication of the crawling movement
+     * Number of thieves who are at the room
      */
-    public void resetCrawl(){
-        crawl = false;
-    }
+    private int atRoom;
+
+    /**
+     * The movement of Crawl out has been initializated
+     */
+    private boolean crawlout;
 
     /**
      * Positions of each member during crawl line 
@@ -87,7 +97,9 @@ public class AssaultParty {
         this.reversed = false;
         this.sended = false;
         this.init = false;
-        this.crawl = false;
+        this.crawlin = false;
+        this.atRoom = 0;
+        this.crawlout = false;
         this.pos = new int[SimulConsts.E];
         for(int i=0; i<SimulConsts.E; i++) pos[i] = 0;
     }
@@ -97,10 +109,12 @@ public class AssaultParty {
      * @param member
      */
     public synchronized void reverseDirection(int member){
-        crawl = false;
+        crawlout = false;
         init = true;
         if(member==2){
+            System.out.println("Reversed!");
             reversed = true; 
+            atRoom=0;
             notifyAll();
         } 
 
@@ -118,7 +132,7 @@ public class AssaultParty {
      * @param room to heist
      */
     public synchronized void sendAssaultParty(int room){
-        crawl = false;
+        crawlin = false;
         sended = true;
         init = true;
         this.room=room;
@@ -142,29 +156,32 @@ public class AssaultParty {
         int move=0; 
 
         if(sended){
-            for(int i=md; i>1; i--)
+            for(int i=md; i>1; i--) {
                 if(valid(member, i, ap)){
-                    move = i; break;
-            } 
+                    move = i; 
+                    break;
+                } 
+            }
         }else{
             move = member==0?3:1;
         }
         
-		while((crawl && move<2) || (member!=0 && init) || !sended){
-            System.out.println("Member "+member+" is waiting to move");
+		while((crawlin && move<2) || (member!=0 && init) || !sended){
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-            for(int i=md; i>1; i--)
+            for(int i=md; i>1; i--) {
                 if(valid(member, i, ap)){
-                    move = i; break;
+                    move = i; 
+                    break;
                 } 
+            }
 		}
 
         if(member==0 && init){
-            crawl = true;
+            crawlin = true;
             init = false;
         }
 
@@ -178,6 +195,14 @@ public class AssaultParty {
         
 
         if(pos[member]==rooms[room]){
+            while(++atRoom < SimulConsts.E) {
+                try { wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            notifyAll();
+             
             //Update Ordinary state
 		    ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.AT_A_ROOM);
 		    repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
@@ -197,30 +222,48 @@ public class AssaultParty {
      * @return true if the thieve get to the site
      */
     public synchronized boolean crawlOut(int ap, int member, int md){
-        int move=1; 
+        int move=0; 
 
-        while((crawl && move<2) || (member!=0 && init) || !reversed){
+        if(reversed){
+            for(int i=md; i>1; i--) {
+                if(valid(member, -i, ap)){
+                    move = i; 
+                    break;
+                } 
+            }
+        }else{
+            move = member==0?3:1;
+        }
+
+
+        System.out.println("member "+member+", positions "+pos[member]+" crawl "+crawlout+ ", move "+move+", init "+init+", reversed "+reversed);
+        while((crawlout && move<2) || (member!=0 && init) || !reversed){
+            System.out.println("member "+member+" is crawlout waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-            if(move==1){
-                for(int i=md; i>1; i++)
-                    if(valid(member, i, ap)) move = i; 
+
+            for(int i=md; i>1; i--) {
+                if(valid(member, -i, ap)){
+                    move = i; 
+                    break;
+                } 
             }
+                 
 		}
 
-        if(member==0 && reversed){
-            crawl = true;
-            reversed = false;
+        if(member==0 && init){
+            crawlout = true;
+            init = false;
         }
 
         pos[member]-=move;
         if(pos[member]<0) pos[member]=0;
-        notifyAll();
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         repos.setPosition(ap*SimulConsts.E + member, pos[member]);
+        notifyAll();
 
         if(pos[member]==0){
             //Update Ordinary state
@@ -237,6 +280,9 @@ public class AssaultParty {
     private synchronized boolean valid(int member, int p, int ap){
         int[] test = pos.clone();
         test[member] += p;
+        if(test[member]<0) test[member]=0;
+        if(test[member]>rooms[room]) test[member]=rooms[room];
+
         Arrays.sort(test);
         System.out.printf("party %d positions %d %d %d\n",ap, test[0],test[1],test[2]);
 

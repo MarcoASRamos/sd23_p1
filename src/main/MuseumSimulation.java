@@ -46,7 +46,7 @@ public class MuseumSimulation{
     
         // start of the simulation
         master.start();
-        System.out.println("Master start");
+        //System.out.println("Master start");
         for (int i = 0; i < SimulConsts.M-1; i++) {
             ordinaries[i].start();
             //System.out.println("Ordinary "+ i +" start");
