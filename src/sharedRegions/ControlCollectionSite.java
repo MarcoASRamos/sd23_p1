@@ -43,8 +43,10 @@ public class ControlCollectionSite {
      * @return room state list
      */
     public synchronized int getRoomIdx(){
-        for(;idx<SimulConsts.N; idx++)
+        while(idx<SimulConsts.N){
             if(rooms[idx]) break;
+            idx++;
+        }
         return idx;
     }
 
@@ -59,7 +61,6 @@ public class ControlCollectionSite {
      * @param repos reference to the general repository
      */
     public ControlCollectionSite(GeneralRepos repos){
-        
         this.repos = repos;
         this.canvas = -1;
         this.room = -1;
@@ -89,6 +90,7 @@ public class ControlCollectionSite {
     public synchronized void takeARest(){
 
         while(!handed){
+            System.out.println("take a rest waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -114,8 +116,9 @@ public class ControlCollectionSite {
      * @param room heisted by the thief
      */
     public synchronized void handACanvas(int canvas, int room){
-
+        int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         while(handed){
+            System.out.println("ord "+ordinaryId+" handCanvas handed waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -129,6 +132,7 @@ public class ControlCollectionSite {
         
 
         while(!collected){
+            System.out.println("ord "+ordinaryId+" handCanvas collected waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -149,7 +153,6 @@ public class ControlCollectionSite {
         handed = false;
         notifyAll();
         
-
         //Update Master state
 		((Master) Thread.currentThread()).setMasterState(MasterStates.DECIDING_WHAT_TO_DO);
 		repos.setMasterState(((Master) Thread.currentThread()).getMasterState());

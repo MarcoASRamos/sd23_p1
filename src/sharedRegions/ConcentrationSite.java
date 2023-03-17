@@ -120,6 +120,7 @@ public class ConcentrationSite {
         if(rooms[0]>=0 || rooms[1]>=0) return 2;
 
         while (waitingThieves<SimulConsts.E) {
+            System.out.println("ApraiseSit waiting");
             try {  wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -149,6 +150,7 @@ public class ConcentrationSite {
                 notifyAll();
             } 
 
+            System.out.println("PrepareAP waiting");
             try { wait();
             } catch (InterruptedException e) { 
                 e.printStackTrace(); 
@@ -206,13 +208,13 @@ public class ConcentrationSite {
 
 
         while(summon!=ordinaryId && !results){
+            System.out.println("ord "+ordinaryId+": amIneeded waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				GenericIO.writelnString(" "+e.getMessage());
                 System.exit(0);
 			}
 		}
-
 
         //Update Ordinary state
 		((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CONCENTRATION_SITE);
@@ -230,7 +232,6 @@ public class ConcentrationSite {
         results = true;
         notifyAll();
         
-
         // Update Master state
         ((Master) Thread.currentThread()).setMasterState(MasterStates.PRESENTING_THE_REPORT);
         repos.setMasterState(((Master) Thread.currentThread()).getMasterState());

@@ -134,35 +134,25 @@ public class Ordinary extends Thread {
         int room, canvas, ap = -1, md = 2 + (int) (Math.random() * (SimulConsts.MD - 2) + 1);
         repos.setOrdinariesMD(ordinaryId, md);
 
-        // System.out.println("ord "+ordinaryId+": AmIneed");
         while (cs.amINeeded(ap)) {
-            // System.out.println("ord "+ordinaryId+": PrepExcursion");
             ap = cs.prepareExcursion();
 
-            System.out.println("ord " + ordinaryId + ": CrawlIn");
             int memberId = party[ap].assignMember(ap);
-            System.out.println("ord " + ordinaryId + " is on party " + ap + " with member id " + memberId);
             boolean atRoom = true;
             while (atRoom)
                 atRoom = party[ap].crawlIn(ap, memberId, md);
 
             room = party[ap].getRoom();
-            System.out.println("ord " + ordinaryId + ": RollCanvas\n\n");
             canvas = museum.rollACanvas(room);
 
-            System.out.println("ord " + ordinaryId + ": CrawlOut");
             memberId = party[ap].assignMember(ap);
             party[ap].reverseDirection(memberId);
             boolean atSite = true;
             while (atSite)
                 atSite = party[ap].crawlOut(ap, memberId, md);
 
-            System.out.println("ord " + ordinaryId + ": HandCanvas");
             ccs.handACanvas(canvas, cs.getRoom(ap));
-            System.out.println("ord " + ordinaryId + ": AmIneed");
-
         }
-        System.out.println("ord " + ordinaryId + ": end life cycle");
     }
 
 }

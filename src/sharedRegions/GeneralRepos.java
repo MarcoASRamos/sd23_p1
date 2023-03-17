@@ -315,7 +315,7 @@ public class GeneralRepos {
         String.format(
                 "RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT");
         for (int i = 0; i < SimulConsts.M - 1; i++)
-            line2Status += String.format("%2d  %2d  %2d %2d   ", elements[i][0], elements[i][1], elements[i][2],
+            line2Status += String.format("%2d  %2d  %2d %2d | ", elements[i][0], elements[i][1], elements[i][2],
                     elements[i][3]);
 
         for (int i = 0; i < SimulConsts.N; i++)
