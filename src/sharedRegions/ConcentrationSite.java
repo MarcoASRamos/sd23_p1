@@ -18,11 +18,10 @@ public class ConcentrationSite {
      */
     private int waitingThieves;
 
-
     /**
-     * Excursion thieve to participate in a party
+     * Counter of summoned thieves
      */
-    private int excursionId;
+    private int recruited;
 
     /**
      * Master is going to sum up the results 
@@ -33,6 +32,11 @@ public class ConcentrationSite {
      * Summon thieve to an assault party
      */
     private int summon;
+
+    /**
+     * The thief summoned responds to the call
+     */
+    private boolean summoned;
 
     /**
      * Preparingassault Party
@@ -95,8 +99,9 @@ public class ConcentrationSite {
         }
 
         this.waitingThieves = 0;
-        this.excursionId = -1;
         this.results = false;
+        this.recruited = 0;
+        this.summoned = true;
         this.summon = -1;
         this.preparingAP = -1;
         this.heisting = 0;
@@ -147,11 +152,10 @@ public class ConcentrationSite {
      */
     public synchronized void prepareAssaultParty(int ap, int room) {
         preparingAP = ap;
-        int recruited = 0;
 
         while (recruited < SimulConsts.E) {
-            if(excursionId==summon){
-                recruited++;
+            if(summoned){
+                summoned = false;
                 try {
                     summon = thievesQueue.read();
                     waitingThieves--;
@@ -165,8 +169,9 @@ public class ConcentrationSite {
                 e.printStackTrace(); 
             }
         }
+
+        recruited = 0;
         summon = -1;
-        excursionId = -1;
         preparingAP = -1;
         rooms[ap] = room;
         heisting += SimulConsts.E;
@@ -188,7 +193,8 @@ public class ConcentrationSite {
         ((Ordinary) Thread.currentThread()).setOrdinaryState(OrdinaryStates.CRAWLING_INWARDS);
         repos.setOrdinaryState(ordinaryId, ((Ordinary) Thread.currentThread()).getOrdinaryState());
 
-        excursionId = ordinaryId;
+        recruited++;
+        summoned = true;
         notifyAll();
 
         party[preparingAP]++;
