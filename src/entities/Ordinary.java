@@ -131,13 +131,13 @@ public class Ordinary extends Thread {
      */
     @Override
     public void run() {
-        int room, canvas, ap = -1, md = 2 + (int) (Math.random() * (SimulConsts.MD - 2) + 1);
+        int memberId, room, canvas, ap = -1, md = 2 + (int) (Math.random() * (SimulConsts.MD - 2) + 1);
         repos.setOrdinariesMD(ordinaryId, md);
 
         while (cs.amINeeded(ap)) {
             ap = cs.prepareExcursion();
 
-            int memberId = party[ap].assignMember(ap);
+            memberId = party[ap].assignMember(ap);
             boolean atRoom = true;
             while (atRoom)
                 atRoom = party[ap].crawlIn(ap, memberId, md);

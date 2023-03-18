@@ -45,6 +45,11 @@ public class ConcentrationSite {
     private int[] party;
 
     /**
+     * Number of thieves currently assault the museum
+     */
+    private int heisting;
+
+    /**
      * Indicate which the Assault party is heisting
      */
     private int rooms[];
@@ -94,6 +99,7 @@ public class ConcentrationSite {
         this.results = false;
         this.summon = -1;
         this.preparingAP = -1;
+        this.heisting = 0;
         this.party = new int[2];
         this.rooms = new int[2];
         for(int i=0; i<2; i++){
@@ -117,7 +123,10 @@ public class ConcentrationSite {
     public synchronized int appraiseSit(boolean roomState) {
         if(roomState) return 3;
         if(waitingThieves>=SimulConsts.E && (rooms[0]<0 || rooms[1]<0)) return 1;
-        if(rooms[0]>=0 || rooms[1]>=0) return 2;
+        if(heisting>0){
+            heisting--;
+            return 2;
+        } 
 
         while (waitingThieves<SimulConsts.E) {
             System.out.println("ApraiseSit waiting");
@@ -160,6 +169,7 @@ public class ConcentrationSite {
         excursionId = -1;
         preparingAP = -1;
         rooms[ap] = room;
+        heisting += SimulConsts.E;
 
         // Update Master state
         ((Master) Thread.currentThread()).setMasterState(MasterStates.ASSEMBLING_A_GROUP);

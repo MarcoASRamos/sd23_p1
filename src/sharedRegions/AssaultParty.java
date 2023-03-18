@@ -16,7 +16,7 @@ public class AssaultParty {
     /**
      * Getter/Assign an assault party id to the thieve
      */
-    public int assignMember(int ap) {
+    public synchronized int assignMember(int ap) {
         members = (members + 1) % SimulConsts.E;
         repos.setApElement(ap * SimulConsts.E + members, room, ((Ordinary) Thread.currentThread()).getOrdinaryId());
         return members;
@@ -108,11 +108,13 @@ public class AssaultParty {
      * @param member
      */
     public synchronized void reverseDirection(int member) {
-        crawlout = false;
-        init = true;
-        if (member == 2) {
+        if (member == SimulConsts.E-1) {
+            System.out.println("Reversed by "+((Ordinary) Thread.currentThread()).getOrdinaryId());
+            init = true;
             reversed = true;
             atRoom = 0;
+            crawlin = false;
+            sended = false;
             notifyAll();
         }
 
@@ -132,6 +134,8 @@ public class AssaultParty {
         crawlin = false;
         sended = true;
         init = true;
+        crawlout = false;
+        reversed = false;
         this.room = room;
         notifyAll();
 
@@ -153,7 +157,7 @@ public class AssaultParty {
 
         if (sended) {
             for (int i = md; i > 1; i--) {
-                if (valid(member, i, ap)) {
+                if (valid(member, i)) {
                     move = i;
                     break;
                 }
@@ -165,6 +169,7 @@ public class AssaultParty {
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         while ((crawlin && move < 2) || (member != 0 && init) || !sended) {
             System.out.println("AP "+ap+" ord " + ordinaryId + " crawlin waiting");
+            System.out.printf("%b %d %d %b %b\n", crawlin, move, member, init, sended);
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -172,7 +177,7 @@ public class AssaultParty {
             }
 
             for (int i = md; i > 1; i--) {
-                if (valid(member, i, ap)) {
+                if (valid(member, i)) {
                     move = i;
                     break;
                 }
@@ -225,7 +230,7 @@ public class AssaultParty {
 
         if (reversed) {
             for (int i = md; i > 1; i--) {
-                if (valid(member, -i, ap)) {
+                if (valid(member, -i)) {
                     move = i;
                     break;
                 }
@@ -237,6 +242,7 @@ public class AssaultParty {
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();        
         while ((crawlout && move < 2) || (member != 0 && init) || !reversed) {
             System.out.println("AP "+ap+" ord " + ordinaryId + " crawlout waiting");
+            System.out.printf("%b %d %d %b %b\n", crawlout, move, member, init, reversed);
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -244,7 +250,7 @@ public class AssaultParty {
             }
 
             for (int i = md; i > 1; i--) {
-                if (valid(member, -i, ap)) {
+                if (valid(member, -i)) {
                     move = i;
                     break;
                 }
@@ -274,7 +280,14 @@ public class AssaultParty {
         return pos[member] > 0;
     }
 
-    private synchronized boolean valid(int member, int p, int ap) {
+    /**
+     * Fuction to validate the resulting state given a thief move 
+     *
+     * @param member id in the party
+     * @param p movement to test 
+     * @return true if the resulting state is valid
+     */
+    private synchronized boolean valid(int member, int p) {
         int[] test = pos.clone();
         test[member] += p;
         if (test[member] < 0)
