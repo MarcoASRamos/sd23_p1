@@ -98,6 +98,8 @@ public class ControlCollectionSite {
 		}
 
         if(canvas==0) rooms[room] = false;
+        else repos.setRobbedPaintings();
+        
         canvas = -1; 
         room = -1;
 

@@ -245,8 +245,8 @@ public class GeneralRepos {
     public void reportFinalStatus() {
         TextFile log = new TextFile();
 
-        if (!log.openForWriting(".", logFileName)) {
-            GenericIO.writelnString("The operation of creating the file " + logFileName + " failed!");
+        if (!log.openForAppending(".", logFileName)) {
+            GenericIO.writelnString("The operation of opening for appending the file " + logFileName + " failed!");
             System.exit(1);
         }
 
