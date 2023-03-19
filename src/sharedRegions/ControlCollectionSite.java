@@ -90,7 +90,6 @@ public class ControlCollectionSite {
     public synchronized void takeARest(){
 
         while(!handed){
-            System.out.println("take a rest waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -120,7 +119,6 @@ public class ControlCollectionSite {
     public synchronized void handACanvas(int canvas, int room){
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         while(handed){
-            System.out.println("ord "+ordinaryId+" handCanvas handed waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -134,7 +132,6 @@ public class ControlCollectionSite {
         
 
         while(!collected){
-            System.out.println("ord "+ordinaryId+" handCanvas collected waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();

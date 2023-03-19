@@ -109,7 +109,6 @@ public class AssaultParty {
      */
     public synchronized void reverseDirection(int member) {
         if (member == SimulConsts.E-1) {
-            System.out.println("Reversed by "+((Ordinary) Thread.currentThread()).getOrdinaryId());
             init = true;
             reversed = true;
             atRoom = 0;
@@ -168,8 +167,6 @@ public class AssaultParty {
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         while ((crawlin && move < 2) || (member != 0 && init) || !sended) {
-            System.out.println("AP "+ap+" ord " + ordinaryId + " crawlin waiting");
-            System.out.printf("%b %d %d %b %b\n", crawlin, move, member, init, sended);
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -200,7 +197,6 @@ public class AssaultParty {
         if (pos[member] == rooms[room]) {
             atRoom++;
             while (atRoom<SimulConsts.E) {
-                System.out.println("AP "+ap+" ord " + ordinaryId + " atRoom waiting");
                 try {
                     wait();
                 } catch (InterruptedException e) {
@@ -241,8 +237,6 @@ public class AssaultParty {
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();        
         while ((crawlout && move < 2) || (member != 0 && init) || !reversed) {
-            System.out.println("AP "+ap+" ord " + ordinaryId + " crawlout waiting");
-            System.out.printf("%b %d %d %b %b\n", crawlout, move, member, init, reversed);
             try {
                 wait();
             } catch (InterruptedException e) {

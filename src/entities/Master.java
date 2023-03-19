@@ -132,11 +132,9 @@ public class Master extends Thread {
         
         boolean assault = true;
         while (assault) {
-            System.out.println("master aprraiseSit");
             room = ccs.getRoomIdx();
             switch (cs.appraiseSit(room>=SimulConsts.N)){
                 case 1:
-                    System.out.println("master case 1");
                     int ap = cs.getAssautlParty();
                     cs.prepareAssaultParty(ap, room);
                     party[ap].sendAssaultParty(cs.getRoom(ap));
@@ -144,7 +142,6 @@ public class Master extends Thread {
 
 
                 case 2:
-                    System.out.println("master case 2");
                     ccs.takeARest();
                     ccs.collectACanvas();
                     break;
@@ -152,7 +149,6 @@ public class Master extends Thread {
 
 
                 case 3:
-                    System.out.println("master case 3");
                     cs.sumUpResults();
                     assault = false;
                     break;

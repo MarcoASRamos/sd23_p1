@@ -140,7 +140,6 @@ public class ConcentrationSite {
         } 
 
         while (waitingThieves<SimulConsts.E) {
-            System.out.println("ApraiseSit waiting");
             try {  wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -169,7 +168,6 @@ public class ConcentrationSite {
                 notifyAll();
             } 
 
-            System.out.println("PrepareAP waiting");
             try { wait();
             } catch (InterruptedException e) { 
                 e.printStackTrace(); 
@@ -230,7 +228,6 @@ public class ConcentrationSite {
 
 
         while(summon!=ordinaryId && !results){
-            System.out.println("ord "+ordinaryId+": amIneeded waiting");
 			try { wait();
 			} catch (InterruptedException e) {
 				GenericIO.writelnString(" "+e.getMessage());
