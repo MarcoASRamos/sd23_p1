@@ -126,7 +126,13 @@ public class ConcentrationSite {
      * @return the master decision
      */
     public synchronized int appraiseSit(boolean roomState) {
-        if(roomState) return 3;
+        if(roomState){
+            if(heisting>0){
+                heisting--;
+                return 2;
+            } 
+            return 3;
+        }
         if(waitingThieves>=SimulConsts.E && (rooms[0]<0 || rooms[1]<0)) return 1;
         if(heisting>0){
             heisting--;
