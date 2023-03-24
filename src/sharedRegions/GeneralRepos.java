@@ -141,7 +141,7 @@ public class GeneralRepos {
      * 
      * @param elem index (= ap*SimulConsts.E+memberId)
      * @param room room to assault
-     * @param oid  ordinary thieve id
+     * @param tid  ordinary thieve id
      */
     public synchronized void setApElement(int elem, int room, int tid) {
         elements[elem][0] = room;

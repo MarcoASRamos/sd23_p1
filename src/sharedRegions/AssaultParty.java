@@ -155,25 +155,25 @@ public class AssaultParty {
         int move = 0;
 
         if (sended) {
-            for (int i = md; i > 1; i--) {
+            for (int i = md; i > 0; i--) {
                 if (valid(member, i)) {
                     move = i;
                     break;
                 }
             }
         } else {
-            move = member == 0 ? 3 : 1;
+            move = member == 0 ? 3 : 0;
         }
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
-        while ((crawlin && move < 2) || (member != 0 && init) || !sended) {
+        while ((crawlin && move < 1) || (member != 0 && init) || !sended) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            for (int i = md; i > 1; i--) {
+            for (int i = md; i > 0; i--) {
                 if (valid(member, i)) {
                     move = i;
                     break;
@@ -225,25 +225,25 @@ public class AssaultParty {
         int move = 0;
 
         if (reversed) {
-            for (int i = md; i > 1; i--) {
+            for (int i = md; i > 0; i--) {
                 if (valid(member, -i)) {
                     move = i;
                     break;
                 }
             }
         } else {
-            move = member == 0 ? 3 : 1;
+            move = member == 0 ? 3 : 0;
         }
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();        
-        while ((crawlout && move < 2) || (member != 0 && init) || !reversed) {
+        while ((crawlout && move < 1) || (member != 0 && init) || !reversed) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            for (int i = md; i > 1; i--) {
+            for (int i = md; i > 0; i--) {
                 if (valid(member, -i)) {
                     move = i;
                     break;
