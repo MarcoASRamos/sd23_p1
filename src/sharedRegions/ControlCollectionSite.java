@@ -114,10 +114,12 @@ public class ControlCollectionSite {
      * Ordinary thieves takes the canvas out of the cylinder and hands it to the master thief, or tells her he is coming empty-handed
      * 
      * @param canvas or empty handed
+     * @param ap assault party
+     * @param members member id
      * @param room heisted by the thief
      */
-    public synchronized void handACanvas(int canvas, int room){
-        int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
+    public synchronized void handACanvas(int canvas, int room, int ap, int members){
+        
         while(handed){
 			try { wait();
 			} catch (InterruptedException e) {
@@ -129,7 +131,7 @@ public class ControlCollectionSite {
         this.canvas = canvas;
         this.room = room;
         notifyAll();
-        
+        repos.setCanvas(ap * SimulConsts.E + members, 0);
 
         while(!collected){
 			try { wait();

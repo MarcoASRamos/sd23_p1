@@ -143,7 +143,7 @@ public class Ordinary extends Thread {
                 atRoom = party[ap].crawlIn(ap, memberId, md);
 
             room = party[ap].getRoom();
-            canvas = museum.rollACanvas(room);
+            canvas = museum.rollACanvas(room, ap, memberId);
 
             memberId = party[ap].assignMember(ap);
             party[ap].reverseDirection(memberId);
@@ -151,7 +151,7 @@ public class Ordinary extends Thread {
             while (atSite)
                 atSite = party[ap].crawlOut(ap, memberId, md);
 
-            ccs.handACanvas(canvas, cs.getRoom(ap));
+            ccs.handACanvas(canvas, cs.getRoom(ap), ap, memberId);
         }
     }
 

@@ -41,6 +41,11 @@ public class GeneralRepos {
     private int[][] elements;
 
     /**
+     * Assault party room
+     */
+    private int[] apRoom;
+
+    /**
      * Rooms number of paintings hanging on the walls
      */
     private int[] paintings;
@@ -85,9 +90,16 @@ public class GeneralRepos {
         distances = new int[SimulConsts.N];
 
         // assault parties
-        elements = new int[SimulConsts.M - 1][4];
-        for (int i = 0; i < SimulConsts.M - 1; i++)
-            resetApElement(i);
+        apRoom = new int[2];
+        apRoom[0] = -1;
+        apRoom[1] = -1;
+
+        elements = new int[SimulConsts.M - 1][3];
+        for (int i = 0; i < SimulConsts.M - 1; i++) {
+            elements[i][0] = -1;
+            elements[i][0] = 0;
+            elements[i][0] = 0;
+        }
 
         // robbed paintings
         robbed = 0;
@@ -137,24 +149,23 @@ public class GeneralRepos {
     }
 
     /**
+     * 
+     * @param ap assault party
+     * @param room room to heist
+     */
+    public synchronized void setApRoom(int ap, int room){
+        apRoom[ap] = room;
+    }
+
+    /**
      * Set Assault Party element
      * 
      * @param elem index (= ap*SimulConsts.E+memberId)
-     * @param room room to assault
      * @param tid  ordinary thieve id
      */
-    public synchronized void setApElement(int elem, int room, int tid) {
-        elements[elem][0] = room;
-        elements[elem][1] = tid;
-        elements[elem][2] = 0;
-        elements[elem][3] = 0;
-    }
-
-    public synchronized void resetApElement(int elem) {
-        elements[elem][0] = -1;
-        elements[elem][1] = -1;
-        elements[elem][2] = 0;
-        elements[elem][3] = 0;
+    public synchronized void setApElement(int elem, int tid) {
+        elements[elem][0] = tid;
+        reportStatus();
     }
 
     /**
@@ -164,7 +175,7 @@ public class GeneralRepos {
      * @param canvas carry
      */
     public synchronized void setCanvas(int elem, int canvas) {
-        elements[elem][3] = canvas;
+        elements[elem][2] = canvas;
         reportStatus();
     }
 
@@ -175,7 +186,7 @@ public class GeneralRepos {
      * @param pos  actual position of the thieve in line
      */
     public synchronized void setPosition(int elem, int pos) {
-        elements[elem][2] = pos;
+        elements[elem][1] = pos;
         reportStatus();
     }
 
@@ -225,11 +236,11 @@ public class GeneralRepos {
         log.writelnString("Stat    Stat S MD   Stat S MD   Stat S MD   Stat S MD   Stat S MD   Stat S MD");
 
         log.writelnString(
-                "                Assault party 1                                 Assault party 2                             Museum");
+                "                Assault party 1                         Assault party 2                             Museum");
         log.writelnString(
-                "    Elem 1          Elem 2          Elem 3          Elem 1          Elem 2          Elem 3      Room 1   Room 2   Room 3   Room 4   Room 5");
+                "      Elem 1      Elem 2      Elem 3          Elem 1      Elem 2      Elem 3    Room 1   Room 2   Room 3   Room 4   Room 5");
         log.writelnString(
-                "RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT");
+                "RId Id Pos Cv   Id Pos Cv   Id Pos Cv   RId Id Pos Cv   Id Pos Cv   Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT");
 
         if (!log.close()) {
             GenericIO.writelnString("The operation of closing the file " + logFileName + " failed!");
@@ -311,12 +322,10 @@ public class GeneralRepos {
             }
 
         log.writelnString(lineStatus); // states of thieves
-
-        String.format(
-                "RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   RId Id Pos Cv   NP DT    NP DT    NP DT    NP DT    NP DT");
-        for (int i = 0; i < SimulConsts.M - 1; i++)
-            line2Status += String.format("%2d  %2d  %2d %2d | ", elements[i][0], elements[i][1], elements[i][2],
-                    elements[i][3]);
+        for (int i = 0; i < SimulConsts.M - 1; i++){
+            if(i% SimulConsts.E==0) line2Status += String.format("%2d> ", apRoom[i/SimulConsts.E]);
+            line2Status += String.format("%2d  %2d %2d | ", elements[i][0], elements[i][1], elements[i][2]);
+        }
 
         for (int i = 0; i < SimulConsts.N; i++)
             line2Status += String.format("%2d %2d    ", paintings[i], distances[i]);

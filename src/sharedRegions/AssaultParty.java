@@ -18,7 +18,7 @@ public class AssaultParty {
      */
     public synchronized int assignMember(int ap) {
         members = (members + 1) % SimulConsts.E;
-        repos.setApElement(ap * SimulConsts.E + members, room, ((Ordinary) Thread.currentThread()).getOrdinaryId());
+        repos.setApElement(ap * SimulConsts.E + members, ((Ordinary) Thread.currentThread()).getOrdinaryId());
         return members;
     }
 

@@ -156,6 +156,7 @@ public class ConcentrationSite {
      * @param room to assault
      */
     public synchronized void prepareAssaultParty(int ap, int room) {
+        repos.setApRoom(ap, room);
         preparingAP = ap;
 
         while (recruited < SimulConsts.E) {
@@ -216,7 +217,10 @@ public class ConcentrationSite {
      * @return master service decision
      */
     public synchronized boolean amINeeded(int ap){
-        if(ap>=0 && --party[ap]==0) rooms[ap]=-1;
+        if(ap>=0 && --party[ap]==0){
+            repos.setApRoom(ap, -1);
+            rooms[ap]=-1;
+        } 
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         repos.setOrdinarySituation(ordinaryId, 'W');
