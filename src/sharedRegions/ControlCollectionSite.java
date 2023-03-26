@@ -5,6 +5,8 @@ import entities.*;
 import genclass.*;
 import main.SimulConsts;
 
+import static java.lang.Thread.sleep;
+
 public class ControlCollectionSite {
 
     /**
@@ -88,6 +90,11 @@ public class ControlCollectionSite {
      * Master hide until return of the ordinaries 
      */
     public synchronized void takeARest(){
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         while(!handed){
 			try { wait();
@@ -119,6 +126,11 @@ public class ControlCollectionSite {
      * @param room heisted by the thief
      */
     public synchronized void handACanvas(int canvas, int room, int ap, int members){
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         
         while(handed){
 			try { wait();
@@ -126,6 +138,12 @@ public class ControlCollectionSite {
 				e.printStackTrace();
 			}
 		}
+
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         handed = true;
         this.canvas = canvas;

@@ -5,6 +5,8 @@ import entities.*;
 import genclass.*;
 import main.SimulConsts;
 
+import static java.lang.Thread.sleep;
+
 public class Museum {
 
     /**
@@ -41,6 +43,12 @@ public class Museum {
      * @return number of canvas stolen by the thieve
      */
     public synchronized int rollACanvas(int room, int ap, int members) {
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if(paintings[room]>0) {
             paintings[room]--;
             repos.setRoomPaitings(paintings);

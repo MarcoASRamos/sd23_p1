@@ -5,6 +5,8 @@ import entities.*;
 import genclass.*;
 import main.SimulConsts;
 
+import static java.lang.Thread.sleep;
+
 public class ConcentrationSite {
 
 
@@ -169,6 +171,12 @@ public class ConcentrationSite {
                 notifyAll();
             } 
 
+            try {
+                sleep((int)(Math.random() * 10));
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             try { wait();
             } catch (InterruptedException e) { 
                 e.printStackTrace(); 
@@ -202,6 +210,12 @@ public class ConcentrationSite {
         summoned = true;
         notifyAll();
 
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         party[preparingAP]++;
         repos.setOrdinarySituation(ordinaryId, 'P');
         return preparingAP;
@@ -230,6 +244,11 @@ public class ConcentrationSite {
         } catch (Exception e) {}
         notifyAll();
 
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         while(summon!=ordinaryId && !results){
 			try { wait();

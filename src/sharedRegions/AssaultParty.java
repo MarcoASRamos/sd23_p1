@@ -6,6 +6,9 @@ import entities.*;
 import genclass.*;
 import main.SimulConsts;
 
+
+import static java.lang.Thread.sleep;
+
 public class AssaultParty {
 
     /**
@@ -108,6 +111,12 @@ public class AssaultParty {
      * @param member
      */
     public synchronized void reverseDirection(int member) {
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (member == SimulConsts.E-1) {
             init = true;
             reversed = true;
@@ -130,6 +139,12 @@ public class AssaultParty {
      * @param room to heist
      */
     public synchronized void sendAssaultParty(int room) {
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         crawlin = false;
         sended = true;
         init = true;
@@ -164,6 +179,14 @@ public class AssaultParty {
         } else {
             move = member == 0 ? 3 : 0;
         }
+
+
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();
         while ((crawlin && move < 1) || (member != 0 && init) || !sended) {
@@ -234,6 +257,14 @@ public class AssaultParty {
         } else {
             move = member == 0 ? 3 : 0;
         }
+
+
+        try {
+            sleep((int)(Math.random() * 10));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
 
         int ordinaryId = ((Ordinary) Thread.currentThread()).getOrdinaryId();        
         while ((crawlout && move < 1) || (member != 0 && init) || !reversed) {
